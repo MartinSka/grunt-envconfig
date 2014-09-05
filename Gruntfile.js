@@ -30,37 +30,41 @@ module.exports = function(grunt) {
 
         // Configuration to be run (and then tested).
         envconfig: {
-            qa: {
-                data: {
-                    hammer_dom: true,
-                    force_desktop: true,
-                    show_app_switcher: false,
-                    headerContainer: '.identity_bar',
-                    mmdbHost: 'https://mmdb.nationalgeographic.com',
-                    memcenHost: 'https://members.nationalgeographic.com',
-                    notificationsHost:
-                        'https://notifications-uat.nationalgeographic.com',
-                    notificationsKey:
-                        '2dfca6e94df5b053b0264e1a0a5a4d46a31507d57e6200cb3d',
-                    crossDomain: true,
-                    noSSL: false,
-                    staticMedia: 'mc.dev.nationalgeographic.com:8010/static-media/ngs-header/',
-                    refreshOnLogin: true,
-                    refreshOnLogout: true,
-                    serverSideLogin: false,
-                    debug: true,
-                    debug_lvl: 5,
-                    alertContainerSelector: 'header nav',
-                    gigyaKey:
-                        '3_LOaUF9fHrs7lFHW7YFFA22qD6MhVsbO_bpqkn6nnKj9-AbGRsec864eKWqmR2Jdu',
-                    gigyaConfig:{
-                        enabledProviders: 'facebook',
-                        autoLogin: true,
-                    }
-                },
+            all: {                
                 options: {
-                    file: '.tmp/scripts/registration.js'
-                }
+                    defaultenv: 'dev',
+                    individual: ['autoInit', 'render']
+                },
+                qa: {
+                    files:[{
+                        src: '.tmp/scripts/registration.js',
+                        data: {
+                            hammer_dom: 'true QA',
+                            gigyaConfig: {
+                                enabledProviders: 'facebook QA',
+                                autoLogin: 'true QA',
+                            }
+                        }
+                    }]
+                },
+                dev: {
+                    files:[{
+                        src: '.tmp/scripts/registration.js',
+                        data: {
+                            hammer_dom: 'true DEV',
+                            gigyaConfig: {
+                                enabledProviders: 'facebook DEV',
+                                autoLogin: true,
+                            }
+                        }
+                    },{
+                        src: '.tmp/scripts/globalNav.js',
+                        data: {
+                            autoInit: true,
+                            render: true
+                        }
+                    }]
+                },
             }
         },
 
