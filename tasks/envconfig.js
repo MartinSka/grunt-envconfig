@@ -8,40 +8,50 @@
 
 'use strict';
 
-module.exports = function(grunt) {    
+module.exports = function(grunt) {
     grunt.registerMultiTask('envconfig', 'Create a file structure to override environment specific settings', function() {
-        var options = this.options(),
+        var options = this.options({
+                override: []
+            }),
             env = grunt.option('env') || options.defaultenv,
             envdata = this.data[env];
 
-        // Copy similate generated file (Only for test now)
-            grunt.file.copy('.tmp/scripts/registration2.js', '.tmp/scripts/registration.js');
-            grunt.file.copy('.tmp/scripts/globalNav2.js', '.tmp/scripts/globalNav.js');
+        if (envdata === undefined) {
+            grunt.warn('An environment is required');
+        }
 
-        // Iterate over all src-dest file pairs.
-        envdata.files.forEach(function(f){            
-            var content, templ;
+        // Iterate over all src files.
+        envdata.files.forEach(function(f) {
+            var dest = f.dest || f.src,
+                content, templ;
 
             if (!grunt.file.exists(f.src)) {
-                grunt.log.warn('Source file "' + f.src + '" not found.');
-                return false;
+                grunt.warn('Source file "' + f.src + '" not found.');
             }
             
+            overrideValues(f.data, options.override);
+
             content = grunt.file.read(f.src);
-            changeValue(f, options);
             templ = grunt.template.process(content, f);
 
-            grunt.file.write(f.src, templ)
+            grunt.file.write(dest, templ)
         });
 
         // Print a success message.
-        grunt.log.writeln('Success message');
+        grunt.log.ok('All environment files created');
 
 
-        function changeValue(f, options) {
-            options.individual.forEach(function(i) {
+        /**
+         * Override file.data settings with grunt CLI parameters
+         *
+         * @param {Object} data File data
+         * @param {Object} override Options vars to override
+         */
+        function overrideValues(data, override) {
+            override.forEach(function(i) {
+                // If Grunt CLI parameters is an override option
                 if (grunt.option(i) !== undefined) {
-                    f.data[i] = grunt.option(i);
+                    data[i] = grunt.option(i);
                 }
             });
         }

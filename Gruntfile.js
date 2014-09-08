@@ -33,7 +33,7 @@ module.exports = function(grunt) {
             all: {                
                 options: {
                     defaultenv: 'dev',
-                    individual: ['autoInit', 'render']
+                    override: ['autoInit', 'render']
                 },
                 qa: {
                     files:[{
@@ -45,11 +45,18 @@ module.exports = function(grunt) {
                                 autoLogin: 'true QA',
                             }
                         }
+                    },{
+                        src: '.tmp/scripts/globalNav.js',
+                        data: {
+                            autoInit: 'true QA',
+                            render: 'true QA'
+                        }
                     }]
                 },
                 dev: {
                     files:[{
-                        src: '.tmp/scripts/registration.js',
+                        src: '.tmp/scripts/registration2.js',
+                        dest: '.tmp/scripts/registration.js',
                         data: {
                             hammer_dom: 'true DEV',
                             gigyaConfig: {
@@ -58,7 +65,8 @@ module.exports = function(grunt) {
                             }
                         }
                     },{
-                        src: '.tmp/scripts/globalNav.js',
+                        src: '.tmp/scripts/globalNav2.js',
+                        dest: '.tmp/scripts/globalNav.js',
                         data: {
                             autoInit: true,
                             render: true
