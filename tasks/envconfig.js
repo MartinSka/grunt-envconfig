@@ -33,6 +33,10 @@ module.exports = function(grunt) {
 
             content = grunt.file.read(f.src);
             templ = grunt.template.process(content, f);
+            
+            //Parse string to boolean
+            templ = templ.replace(/'\!true'/ig, true);
+            templ = templ.replace(/'\!false'/ig, false);
 
             grunt.file.write(dest, templ)
         });
